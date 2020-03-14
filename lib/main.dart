@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './transaction.dart';
 
@@ -36,34 +37,65 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Weekly Expense Tracker'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Card(
-              color: Colors.blue,
-              child: Text('Top Expense Chart'),
-              elevation: 5,
+      body: Container(
+        color: Colors.blueGrey[200],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Card(
+                color: Colors.white,
+                child: Text('Top Expense Chart',
+                    style: TextStyle(color: Colors.blue[900])),
+                elevation: 3,
+              ),
             ),
-          ),
-          Column(
-            children: transactions.map((transaction) {
-              return Card(
-                child: Row(
-                  children: <Widget>[
-                    Container(child: Text(transaction.amount.toString())),
-                    Column(children: <Widget>[
-                      Text(transaction.title),
-                      Text(transaction.date.toString())
-                    ])
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
+            Column(
+              children: transactions.map((transaction) {
+                return Card(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 15,
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            color: Colors.blue[900],
+                            width: 2,
+                          )),
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            '\$${transaction.amount}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.blue[800],
+                            ),
+                          )),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              transaction.title,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              DateFormat.yMMMd().format(transaction.date),
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          ])
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
