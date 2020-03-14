@@ -26,20 +26,22 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Container(
         color: Colors.blueGrey[200],
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.white,
-                child: Text('Top Expense Chart',
-                    style: TextStyle(color: Colors.blue[900])),
-                elevation: 3,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                child: Card(
+                  color: Colors.white,
+                  child: Text('Top Expense Chart',
+                      style: TextStyle(color: Colors.blue[900])),
+                  elevation: 3,
+                ),
               ),
-            ),
-            UserTransactions()
-          ],
+              UserTransactions()
+            ],
+          ),
         ),
       ),
     );
