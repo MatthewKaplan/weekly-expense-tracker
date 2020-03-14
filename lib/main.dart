@@ -4,6 +4,7 @@ import 'package:weekly_expense_tracker/widgets/new_transaction.dart';
 import './widgets/new_transaction.dart';
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
+import './widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,26 +28,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-    // Transaction(
-    //   id: '1',
-    //   title: 'Basketball Shoes',
-    //   amount: 89.99,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: '2',
-    //   title: 'Groceries',
-    //   amount: 64.29,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  final List<Transaction> _userTransactions = [];
 
-  void _addNewTransaction(String title, double amount) {
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((transaction) {
+      return transaction.date
+          .isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
+  void _addNewTransaction(String title, double amount, DateTime chosenDate) {
     final newTransaction = Transaction(
         title: title,
         amount: amount,
-        date: DateTime.now(),
+        date: chosenDate,
         id: DateTime.now().toString());
 
     setState(() {
@@ -63,6 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Container(
-        color: Colors.blueGrey[200],
+        color: Colors.grey[400],
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,12 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: double.infinity,
                 child: Card(
                   color: Colors.white,
-                  child: Text('Top Expense Chart',
-                      style: TextStyle(color: Colors.blue[900])),
-                  elevation: 3,
                 ),
               ),
-              TransactionList(_userTransactions),
+              Chart(_recentTransactions),
+              TransactionList(_userTransactions, _deleteTransaction),
             ],
           ),
         ),
